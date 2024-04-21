@@ -4,7 +4,6 @@ import 'package:memorimage_160421082_160421046/class/question.dart';
 import 'package:memorimage_160421082_160421046/class/result.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +13,8 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  bool _showQuestion = true;
+  bool _showOptions = false;
   int _maxtime = 5;
   int _hitung = 0;
   late Timer _timer;
@@ -48,6 +49,31 @@ class _GameState extends State<Game> {
     return top_point;
   }
 
+  void _showQuestionPopup() {
+    if(_question_no > _questions.length-1){
+      _showOptions = true;
+      _showQuestion = false;
+
+    }
+    else{
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 3), () {
+          setState(() {
+            _question_no++;
+          });
+        });
+
+        return AlertDialog(
+          title: Text('Question'),
+          content: Image.asset(_questions[_question_no].answer),
+        );
+    },
+  );
+  }
+}
+
   finishQuiz() {
     _timer.cancel();
     _question_no = 0;
@@ -81,32 +107,11 @@ class _GameState extends State<Game> {
             }
           });
           finishQuiz();
-          // _question_no++;
-          // if(_question_no > _questions.length-1)
-          // {
-          //   _question_no = 0;
-          // }
-          // _hitung=_maxtime;
-          //_timer.cancel();
-          // showDialog<String>(
-          //     context: context,
-          //     builder: (BuildContext context) => AlertDialog(
-          //           title: Text('Quiz'),
-          //           content: Text('Waktu Habis'),
-          //           actions: <Widget>[
-          //             TextButton(
-          //               onPressed: () => Navigator.pop(context, 'OK'),
-          //               child: const Text('OK'),
-          //             ),
-          //           ],
-          //         ));
         }
-        // else{
-        //   _hitung--;
-        // }
       });
     });
   }
+
 
   @override
   void initState() {
@@ -145,6 +150,19 @@ class _GameState extends State<Game> {
         'assets/images/c-12-3.png',
         'assets/images/c-12-4.png',
         'assets/images/c-12-1.png'));
+
+    _showOptions = true;
+    _showQuestion = false;
+    _hitung = _maxtime;
+    _point = 0;
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        _showQuestion = true;
+        _showOptions = false;
+      });
+      _showQuestionPopup();
+    });
   }
 
   @override
@@ -170,60 +188,66 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Quiz'),
-      backgroundColor: Colors.lightBlue,
-    ),
-    body: Center(
-      child: Column(
-        children: <Widget>[
-          CircularPercentIndicator(
-            radius: 60.0,
-            lineWidth: 20.0,
-            percent: 1 - (_hitung / _maxtime),
-            center: Text(formatTime(_hitung)),
-            progressColor: Colors.red,
-          ),
-          Container(
-            width: 300,
-            height: 150,
-          ),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Quiz'),
+        backgroundColor: Colors.lightBlue,
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
             children: [
-              IconButton(
-                icon: Image.asset(_questions[_question_no].option_a),
-                onPressed: () {
-                  checkAnswer(_questions[_question_no].option_a);
-                },
+              if (_showOptions)
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: CircularPercentIndicator(
+                    radius: 60.0,
+                    lineWidth: 20.0,
+                    percent: 1 - (_hitung / _maxtime),
+                    center: Text(formatTime(_hitung)),
+                    progressColor: Colors.red,
+                  ),
+                ),
               ),
-              IconButton(
-                icon: Image.asset(_questions[_question_no].option_b),
-                onPressed: () {
-                  checkAnswer(_questions[_question_no].option_b);
-                },
+              if(_showOptions)
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                children: [
+                  IconButton(
+                    icon: Image.asset(_questions[_question_no].option_a),
+                    onPressed: () {
+                      checkAnswer(_questions[_question_no].option_a);
+                    },
+                  ),
+                  IconButton(
+                    icon: Image.asset(_questions[_question_no].option_b),
+                    onPressed: () {
+                      checkAnswer(_questions[_question_no].option_b);
+                    },
+                  ),
+                  IconButton(
+                    icon: Image.asset(_questions[_question_no].option_c),
+                    onPressed: () {
+                      checkAnswer(_questions[_question_no].option_c);
+                    },
+                  ),
+                  IconButton(
+                    icon: Image.asset(_questions[_question_no].option_d),
+                    onPressed: () {
+                      checkAnswer(_questions[_question_no].option_d);
+                    },
+                  ),
+                ],
               ),
-              IconButton(
-                icon: Image.asset(_questions[_question_no].option_c),
-                onPressed: () {
-                  checkAnswer(_questions[_question_no].option_c);
-                },
-              ),
-              IconButton(
-                icon: Image.asset(_questions[_question_no].option_d),
-                onPressed: () {
-                  checkAnswer(_questions[_question_no].option_d);
-                },
-              ),
+              Divider(height: 50),
+              Text("Score = " + _point.toString()),
             ],
           ),
-          Divider(height: 50),
-          Text("Score = " + _point.toString()),
-        ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
