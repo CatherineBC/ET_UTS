@@ -28,12 +28,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MemoryMage Game',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 153, 221)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'MemoryMage Home Page'),
       routes: {
         'game': (context) => Game(),
       },
@@ -71,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget funDrawer(){
-      return Drawer(
+  Widget funDrawer() {
+    return Drawer(
       elevation: 16.0,
       child: Column(
         children: <Widget>[
@@ -87,9 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.pushNamed(context, "game");
               }),
-      ],
+        ],
       ),
-      );  
+    );
   }
 
   @override
