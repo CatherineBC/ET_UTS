@@ -7,5 +7,4 @@ class QuestionObj {
 
 QuestionObj(this.option_a,
 this.option_b, this.option_c, this.option_d, this.answer);
-
 }
