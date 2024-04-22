@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:memorimage_160421082_160421046/class/question.dart';
 import 'package:memorimage_160421082_160421046/class/result.dart';
+import 'package:memorimage_160421082_160421046/screen/result.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _GameState extends State<Game> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (answer == _questions[_question_no].answer) {
-          _point += 100;
+          _point += 1;
         }
         _question_no++;
         _timer.cancel();
@@ -110,13 +111,12 @@ class _GameState extends State<Game> {
               title: Text('Quiz'),
               content: Text('Your point = $_point'),
               actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'OK');
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
-                ),
+              ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => result(_point)));
+              },
+              child: Text("View Your Result")),
               ],
             ));
   }
@@ -223,17 +223,17 @@ class _GameState extends State<Game> {
             child: Column(
               children: [
                 Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: CircularPercentIndicator(
-                      radius: 60.0,
-                      lineWidth: 20.0,
-                      percent: 1 - (_hitung / _maxtime),
-                      center: Text(formatTime(_hitung)),
-                      progressColor: Colors.red,
-                    ),
-                  ),
+                  // alignment: Alignment.topRight,
+                  // child: Padding(
+                  //   padding: EdgeInsets.all(16.0),
+                  //   child: CircularPercentIndicator(
+                  //     radius: 60.0,
+                  //     lineWidth: 20.0,
+                  //     percent: 1 - (_hitung / _maxtime),
+                  //     center: Text(formatTime(_hitung)),
+                  //     progressColor: Colors.red,
+                  //   ),
+                  // ),
                 ),
                 if (_showOptions)
                   GridView.count(
