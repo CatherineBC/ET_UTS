@@ -3,6 +3,8 @@ import 'package:memorimage_160421082_160421046/screen/game.dart';
 import 'package:memorimage_160421082_160421046/screen/highscore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:memorimage_160421082_160421046/screen/login.dart';
+import 'package:lottie/lottie.dart';
+
 
 String active_user = "";
 
@@ -114,27 +116,31 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Memorimage"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You will be given objects in the cards. Find the card you have seen before, among others.',
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Game()),
-                );
-              },
-              child: Text("Play Game"),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You will be given objects in the cards. Find the card you have seen before, among others.',
+              ),
+              LottieBuilder.asset(
+                "assets/brain_animation.json",
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Game()),
+                  );
+                },
+                child: Text("Play Game"),
+              ),
+            ],
+          ),
         ),
       ),
-      drawer:
-          funDrawer(), // This trailing comma makes auto-formatting nicer for build methods.
+      drawer: funDrawer(),
     );
   }
 }
