@@ -1,5 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:memorimage_160421082_160421046/main.dart';
+import 'package:memorimage_160421082_160421046/screen/game.dart';
+import 'package:memorimage_160421082_160421046/screen/highscore.dart';
 
 class result extends StatelessWidget {
   final int score;
@@ -21,15 +25,53 @@ class result extends StatelessWidget {
   }
   
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Player Result'),
       ),
       body: Center(
-        child:Column(children: [Text("Your Score : " + score.toString()), 
-        Text(coba(score))])
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Your Score: $score"),
+            Text(coba(score)),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Game(),
+                  ),
+                );
+              },
+              child: Text('Play Again'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HighScore(),
+                  ),
+                );
+              },
+              child: Text('Go to High Score'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyApp(),
+                  ),
+                );
+              },
+              child: Text('Go to Main Menu'),
+            ),
+          ],
+        ),
       ),
     );
   }
