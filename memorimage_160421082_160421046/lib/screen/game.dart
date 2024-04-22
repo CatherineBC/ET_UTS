@@ -81,7 +81,7 @@ class _GameState extends State<Game> {
   }
 
   startTimerPlay() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_question_no >= _questions.length - 1) {
           _showOptions = true;

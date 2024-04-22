@@ -26,7 +26,12 @@ class _TopScoreState extends State<TopScore> {
   int _topScore2 = 0;
   int _topScore3 = 0;
 
-  String _topUser = "";
+
+
+  String _topUser1 = "";
+  String _topUser2 = "";
+  String _topUser3 = "";
+
 
   @override
   void initState() {
@@ -42,13 +47,20 @@ class _TopScoreState extends State<TopScore> {
     int topPoint2 = prefs.getInt("top_point2") ?? 0;
     int topPoint3 = prefs.getInt("top_point3") ?? 0;
 
-    String topUser = prefs.getString("username") ?? "-";
+    String topUsers1 = prefs.getString("top_user1") ?? "";
+    String topUsers2 = prefs.getString("top_user2") ?? "";
+    String topUsers3 = prefs.getString("top_user3") ?? "";
+
+
     setState(() {
       _topScore1 = topPoint1;
       _topScore2 = topPoint2;
       _topScore3 = topPoint3;
 
-      _topUser = topUser;
+      _topUser1 = topUsers1;
+      _topUser2 = topUsers2;
+      _topUser3 = topUsers3;
+
     });
   }
 
@@ -59,7 +71,10 @@ class _TopScoreState extends State<TopScore> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Top User: $_topUser"),
+            Text("Top User ke-1: $_topUser1"),
+            Text("Top User ke-2: $_topUser2"),
+            Text("Top User ke-3: $_topUser3"),
+
             Text("Top Point ke-1: $_topScore1"),
             Text("Top Point ke-2: $_topScore2"),
             Text("Top Point ke-3: $_topScore3"),
