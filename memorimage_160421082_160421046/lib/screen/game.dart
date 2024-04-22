@@ -45,7 +45,7 @@ class _GameState extends State<Game> {
         correct4 = Colors.transparent;
         click = false;
 
-        if (_question_no > _questions.length - 1) {;
+        if (_question_no > _questions.length - 1) {
           finishQuiz();
         }
       });
@@ -77,11 +77,11 @@ class _GameState extends State<Game> {
           prefs.setInt("topPoint1", _point);
           prefs.setString("juara1", username);
 
-          // prefs.setInt("topPoint2", topPoint1);
-          // prefs.setString("juara2", juara1);
+          prefs.setInt("topPoint2", topPoint1);
+          prefs.setString("juara2", juara1);
 
-          // prefs.setInt("topPoint3", topPoint2);
-          // prefs.setString("juara3", juara2);
+          prefs.setInt("topPoint3", topPoint2);
+          prefs.setString("juara3", juara2);
         } else {
           prefs.setInt("topPoint2", _point);
           prefs.setString("juara2", username);
@@ -132,13 +132,15 @@ class _GameState extends State<Game> {
               content: Text('Your point = $_point'),
               actions: <Widget>[
                 ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => result(_point)));
-                    },
-                    child: Text("View Your Result")),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => result(_point)),
+                      ModalRoute.withName('/'), //artinya pop smpe screen main.
+                    );
+                  },
+                  child: Text("View Your Result"),
+                ),
               ],
             ));
   }
