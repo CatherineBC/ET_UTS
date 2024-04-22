@@ -10,6 +10,11 @@ Future<String> checkUser() async {
   String username = prefs.getString("username") ?? '';
   return username;
 }
+void doLogout() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove("username");
+  main();
+}
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
