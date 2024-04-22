@@ -94,6 +94,12 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.pushNamed(context, "score");
               }),
+               ListTile(
+              title: new Text("Logout"),
+              leading: new Icon(Icons.logout),
+              onTap: () {
+                doLogout();
+              }),
         ],
       ),
     );
