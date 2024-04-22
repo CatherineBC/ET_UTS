@@ -18,6 +18,7 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
   bool _showOptions = false;
+  bool click = false;
   Color correct1 = Colors.transparent;
   Color correct2 = Colors.transparent;
   Color correct3 = Colors.transparent;
@@ -32,35 +33,41 @@ class _GameState extends State<Game> {
 
   void checkAnswer(String answer) {
     setState(() {
-      if (answer == _questions[_question_no].answer) {
-        _point += 100;
-      }
-      _question_no++;
-      if (_question_no > _questions.length - 1) {
-        checkTopScore().then((int result) {
-          int topScore = result;
-          if (topScore < _point) {
-            changeTopScore(_point);
-          }
-        });
+        click = true;
+    });
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (answer == _questions[_question_no].answer) {
+          _point += 100;
+        }
+        _question_no++;
+        _timer.cancel();
+        correct1 = Colors.transparent;
+        correct2 = Colors.transparent;
+        correct3 = Colors.transparent;
+        correct4 = Colors.transparent;
+        click = false;
 
-        finishQuiz();
-      }
+        if (_question_no > _questions.length - 1) {
+          checkTopScore().then((int result) {
+            int topScore = result;
+            if (topScore < _point) {
+              changeTopScore(_point);
+            }
+          });
 
-      _hitung = _maxtime;
-
+          finishQuiz();
+        }
+      });
     });
   }
 
-  bool cekJawaban(String answer){
-    if(answer == _questions[_question_no].answer){
+  bool cekJawaban(String answer) {
+    if (answer == _questions[_question_no].answer) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
-
-
   }
 
   Future<int> checkTopScore() async {
@@ -72,7 +79,7 @@ class _GameState extends State<Game> {
   startTimerPlay() {
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       setState(() {
-        if (_question_no > _questions.length-1) {
+        if (_question_no >= _questions.length - 1) {
           _showOptions = true;
           _question_no = 0;
           _timer.cancel();
@@ -235,65 +242,93 @@ class _GameState extends State<Game> {
                     children: [
                       GestureDetector(
                         child: Container(
-                          child: Image.asset(_questions[_question_no].option_a),
-                          color : correct1),
-                          onTap: () {
-                          checkAnswer(_questions[_question_no].option_a); // top score
-                          setState(() {
-                             if(cekJawaban(_questions[_question_no].option_a)){
-                              correct1 == Colors.green;
-
-                             } 
-                             else{
-                              correct1 == Colors.red; }//buat ubah button pny warna
-                          });
+                            margin: EdgeInsets.all(10),
+                            child:
+                                Image.asset(_questions[_question_no].option_a),
+                            color: correct1),
+                        onTap: () {
+                          if (click == true) {
+                            return null;
+                          } else {
+                            checkAnswer(_questions[_question_no].option_a); // top score
+                            setState(() {
+                              if (cekJawaban(_questions[_question_no].option_a)) {
+                                correct1 = Colors.green;
+                              } else {
+                                correct1 = Colors.red;
+                              } //buat ubah button pny warna
+                            });
+                          }
                         },
                       ),
                       GestureDetector(
                         child: Container(
-                          child: Image.asset(_questions[_question_no].option_b),
-                          color : correct2),
-                          onTap: () {
-                          checkAnswer(_questions[_question_no].option_b); // top score
-                          setState(() {
-                             if(cekJawaban(_questions[_question_no].option_a)){
-                              correct1 == Colors.green;
-
-                             } 
-                             else{
-                              correct1 == Colors.red; }//buat ubah button pny warna
-                          });
-                        },
-                      ),
-                     GestureDetector(
-                        child: Container(
-                          child: Image.asset(_questions[_question_no].option_c),
-                          color : correct3),
-                          onTap: () {
-                          checkAnswer(_questions[_question_no].option_c); // top score
-                          setState(() {
-                             if(cekJawaban(_questions[_question_no].option_a)){
-                              correct1 == Colors.green;
-
-                             } 
-                             else{
-                              correct1 == Colors.red; }//buat ubah button pny warna
-                          });
+                            margin: EdgeInsets.all(10),
+                            child:
+                                Image.asset(_questions[_question_no].option_b),
+                            color: correct2),
+                        onTap: () {
+                          if (click == true) {
+                            return null;
+                          } else {
+                            checkAnswer(
+                                _questions[_question_no].option_b); // top score
+                            setState(() {
+                              if (cekJawaban(
+                                  _questions[_question_no].option_b)) {
+                                correct2 = Colors.green;
+                              } else {
+                                correct2 = Colors.red;
+                              }
+                              click = true; //buat ubah button pny warna
+                            });
+                          }
                         },
                       ),
                       GestureDetector(
                         child: Container(
-                          child: Image.asset(_questions[_question_no].option_d),
-                          color : correct4),
-                          onTap: () {
-                          checkAnswer(_questions[_question_no].option_d); // top score
-                          setState(() {
-                             if(cekJawaban(_questions[_question_no].option_a)){
-                              correct1 == Colors.green;
-                             } 
-                             else{
-                              correct1 == Colors.red; }//buat ubah button pny warna
-                          });
+                            margin: EdgeInsets.all(10),
+                            child:
+                                Image.asset(_questions[_question_no].option_c),
+                            color: correct3),
+                        onTap: () {
+                          if (click == true) {
+                            return null;
+                          } else {
+                            checkAnswer(
+                                _questions[_question_no].option_c); // top score
+                            setState(() {
+                              if (cekJawaban(
+                                  _questions[_question_no].option_c)) {
+                                correct3 = Colors.green;
+                              } else {
+                                correct3 = Colors.red;
+                              } //buat ubah button pny warna
+                            });
+                          }
+                        },
+                      ),
+                      GestureDetector(
+                        child: Container(
+                            margin: EdgeInsets.all(10),
+                            child:
+                                Image.asset(_questions[_question_no].option_d),
+                            color: correct4),
+                        onTap: () {
+                          if (click == true) {
+                            return null;
+                          } else {
+                            checkAnswer(
+                                _questions[_question_no].option_d); // top scor
+                            setState(() {
+                              if (cekJawaban(
+                                  _questions[_question_no].option_d)) {
+                                correct4 = Colors.green;
+                              } else {
+                                correct4 = Colors.red;
+                              } //buat ubah button pny warna
+                            });
+                          }
                         },
                       )
                     ],
