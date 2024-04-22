@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:memorimage_160421082_160421046/class/question.dart';
-import 'package:memorimage_160421082_160421046/class/result.dart';
 import 'package:memorimage_160421082_160421046/screen/result.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,10 +45,7 @@ class _GameState extends State<Game> {
         correct4 = Colors.transparent;
         click = false;
 
-        if (_question_no > _questions.length - 1) {
-          checkTopScores().then((List<int> topScores) {
-            changeTopScores(topScores, _point); // Memperbarui 3 poin tertinggi
-          });
+        if (_question_no > _questions.length - 1) {;
           finishQuiz();
         }
       });
@@ -67,17 +60,40 @@ class _GameState extends State<Game> {
     }
   }
 
-  Future<List<int>> checkTopScores() async {
+  void checkTopScores() async {
     final prefs = await SharedPreferences.getInstance();
-    int topPoint1 = prefs.getInt("top_point1") ?? 0;
-    int topPoint2 = prefs.getInt("top_point2") ?? 0;
-    int topPoint3 = prefs.getInt("top_point3") ?? 0;
+    var topPoint1 = prefs.getInt("topPoint1") ?? 0;
+    var topPoint2 = prefs.getInt("topPoint2") ?? 0;
+    var topPoint3 = prefs.getInt("topPoint3") ?? 0;
 
-    // Mengurutkan skor dari yang terbesar ke yang terkecil
-    List<int> topScores = [topPoint1, topPoint2, topPoint3];
-    topScores.sort((a, b) => b.compareTo(a));
+    var username = prefs.getString("username") ?? "";
 
-    return topScores;
+    var juara1 = prefs.getString("juara1") ?? "";
+    var juara2 = prefs.getString("juara2") ?? "";
+
+    if (_point > topPoint3) {
+      if (_point > topPoint2) {
+        if (_point > topPoint1) {
+          prefs.setInt("topPoint1", _point);
+          prefs.setString("juara1", username);
+
+          // prefs.setInt("topPoint2", topPoint1);
+          // prefs.setString("juara2", juara1);
+
+          // prefs.setInt("topPoint3", topPoint2);
+          // prefs.setString("juara3", juara2);
+        } else {
+          prefs.setInt("topPoint2", _point);
+          prefs.setString("juara2", username);
+
+          prefs.setInt("topPoint3", topPoint2);
+          prefs.setString("juara3", juara2);
+        }
+      } else {
+        prefs.setInt("topPoint3", _point);
+        prefs.setString("juara3", username);
+      }
+    }
   }
 
   startTimerPlay() {
@@ -108,6 +124,7 @@ class _GameState extends State<Game> {
   finishQuiz() {
     _timer.cancel();
     _question_no = 0;
+    checkTopScores();
     showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -116,34 +133,14 @@ class _GameState extends State<Game> {
               actions: <Widget>[
                 ElevatedButton(
                     onPressed: () {
-                      checkTopScores().then((List<int> topScores) {
-                        // Panggil changeTopScores untuk memperbarui poin tertinggi dengan skor saat ini
-                        changeTopScores(topScores, _point);
-                        // Pindah ke halaman hasil
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => result(_point)));
-                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => result(_point)));
                     },
                     child: Text("View Your Result")),
               ],
             ));
-  }
-
-  void startTimer() {
-    _hitung = _maxtime;
-    _timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
-      setState(() {
-        _hitung--;
-        if (_hitung == 0) {
-          checkTopScores().then((List<int> topScores) {
-            changeTopScores(topScores, _point); // Memperbarui 3 poin tertinggi
-          });
-          finishQuiz();
-        }
-      });
-    });
   }
 
   @override
@@ -192,7 +189,6 @@ class _GameState extends State<Game> {
       setState(() {
         _showOptions = false;
       });
-      // _showQuestionPopup();
     });
   }
 
@@ -208,26 +204,6 @@ class _GameState extends State<Game> {
     var minutes = ((hitung % 3600) ~/ 60).toString().padLeft(2, '0');
     var seconds = (hitung % 60).toString().padLeft(2, '0');
     return "$hours:$minutes:$seconds";
-  }
-
-  // void changeTopScore(point) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String user_id = prefs.getString("user_id") ?? '';
-  //   prefs.setInt("top_point", point);
-  //   prefs.setString("top_user", user_id);
-  // }
-  void changeTopScores(List<int> topScores, int point) async {
-    topScores.sort((a, b) =>
-        b.compareTo(a)); // Urutkan poin dari yang tertinggi ke terendah
-    if (point > topScores.last) {
-      topScores.removeLast(); // Hapus poin terendah
-      topScores.add(point); // Tambahkan skor baru
-      topScores.sort((a, b) => b.compareTo(a)); // Urutkan kembali poin
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setInt("top_point1", topScores[0]);
-      prefs.setInt("top_point2", topScores[1]);
-      prefs.setInt("top_point3", topScores[2]);
-    }
   }
 
   @override

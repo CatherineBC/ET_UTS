@@ -5,11 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:memorimage_160421082_160421046/screen/login.dart';
 
 String active_user = "";
+
 Future<String> checkUser() async {
   final prefs = await SharedPreferences.getInstance();
   String username = prefs.getString("username") ?? '';
   return username;
 }
+
 void doLogout() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.remove("username");

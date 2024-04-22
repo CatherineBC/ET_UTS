@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'game.dart'; // Import game.dart untuk mengakses data dari game.dart
 
 class HighScore extends StatelessWidget {
   @override
@@ -26,8 +25,6 @@ class _TopScoreState extends State<TopScore> {
   int _topScore2 = 0;
   int _topScore3 = 0;
 
-
-
   String _topUser1 = "";
   String _topUser2 = "";
   String _topUser3 = "";
@@ -41,15 +38,15 @@ class _TopScoreState extends State<TopScore> {
 
   // Fungsi untuk mengambil data username dan point dari game.dart
   Future<void> fetchTopData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     // Mengambil data point dan username dari game.dart
-    int topPoint1 = prefs.getInt("top_point1") ?? 0;
-    int topPoint2 = prefs.getInt("top_point2") ?? 0;
-    int topPoint3 = prefs.getInt("top_point3") ?? 0;
+    int topPoint1 = prefs.getInt("topPoint1") ?? 0;
+    int topPoint2 = prefs.getInt("topPoint2") ?? 0;
+    int topPoint3 = prefs.getInt("topPoint3") ?? 0;
 
-    String topUsers1 = prefs.getString("top_user1") ?? "";
-    String topUsers2 = prefs.getString("top_user2") ?? "";
-    String topUsers3 = prefs.getString("top_user3") ?? "";
+    String topUsers1 = prefs.getString("juara1") ?? "";
+    String topUsers2 = prefs.getString("juara2") ?? "";
+    String topUsers3 = prefs.getString("juara3") ?? "";
 
 
     setState(() {
